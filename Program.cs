@@ -3,11 +3,16 @@ using CastleGrimtol.Project;
 
 namespace CastleGrimtol
 {
-    public class Program
+  public class Program
+  {
+    public static void Main()
     {
-        public static void Main(string[] args)
-        {
-
-        }
+      Game game = new Game();
+      game.Setup();
+      while (game.Playing)
+      {
+          game.play();
+      }
     }
+  }
 }
