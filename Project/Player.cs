@@ -12,6 +12,7 @@ namespace CastleGrimtol.Project
     {
       Score = 0;
       Name = name;
+      Inventory = new List<Item>();
     }
   }
 }
