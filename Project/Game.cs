@@ -21,19 +21,28 @@ namespace CastleGrimtol.Project
         switch (input)
         {
            case "use":
+           System.Console.WriteLine("Which item to use?");
+           var Consume = Console.ReadLine().ToLower();
+           UseItem(Consume);
                         
-          UseItem(userInput[0]);
+          // UseItem(userInput[0]);
           break;
           case "go":
             {
               
               System.Console.WriteLine("Which Direction?");
               var direction = Console.ReadLine();
-              var splitChoice= direction.Split(" ");
+              var splitChoice = direction.ToLower().Split(" "); //will split work???
               var nextRoom = CurrentRoom.Go(direction);
-              if (nextRoom != null)
-              {
+              if (nextRoom != null)        
+              { var helmet = CurrentPlayer.Inventory.Find(i => i.Name.Contains("bicycle helmet"));
+                if(nextRoom.Name == "Chapter 4: The Social Security Office. " && !CurrentPlayer.Inventory.Contains(helmet))
+                {
+                  System.Console.WriteLine("You fall violently off the bikepath and die");
+                }
+                  else 
                 CurrentRoom = nextRoom;
+                
               }
               else
               {
@@ -72,7 +81,7 @@ namespace CastleGrimtol.Project
             break;
           case "restart":
             {
-              restart();
+              Reset();
             }
             break;
           case "description":
@@ -80,12 +89,12 @@ namespace CastleGrimtol.Project
               Console.WriteLine(CurrentRoom.Description);
             }
             break;
-          case "win":
-            {
-              Console.WriteLine("You won! Have a nice day!");
-              Playing = false;
-            }
-            break;
+          // case "win":
+          //   {
+          //     Console.WriteLine("You won! Have a nice day!");
+          //     Playing = false;
+          //   }
+          //   break;
           case "lose":
             {
               lose();
@@ -116,7 +125,7 @@ namespace CastleGrimtol.Project
       Room SPBedroom = new Room("Cuarto ", "¿Recuerdas que tienes algún cambio en tu dormitorio ... pero dónde? Oye, esto podría ser útil, una cinta de mezcla de Ricky Martin. También algo brillante brilla desde debajo de la cama");
       Room garage = new Room("Chapter 2: The Garage. ", "Ah the garage, many an epic adventure has started here. Now to find your helmet...Choose your Destiny: Pick up helmet *Hotfix* Type South to go to the bikepath or north to go back to the livingroom");
       Room SPGarage = new Room("Garaje ", "Ah, el garaje, muchas aventuras épicas han comenzado aquí. Ahora para encontrar tu casco ... Elige tu destino: recoger el casco");
-      Room bikepath = new Room("Chapter 3: The Bike Path. ", "A quiet and efficient way to get to places along the bike path. You notice a bus stalled on the bridge, could this be the same bus? Choose Your Destiny: Go help the stalled bus or continue your journey *HOTFIX* Type north to go back to the garage or type south to go to the social security office.");
+      Room bikepath = new Room("Chapter 3: The Bike Path. ", "A quiet and efficient way to get to places along the bike path. Before you ride, you should put on your helmet, because reasons. You notice a bus stalled on the bridge, could this be the same bus? Choose Your Destiny: Go help the stalled bus or continue your journey *HOTFIX* Type north to go back to the garage or type south to go to the social security office.");
       Room SPBikePath = new Room("Ciclovía ", "Una forma silenciosa y eficiente de llegar a lugares a lo largo del carril bici. ¿Ha notado un autobús detenido en el puente, podría ser el mismo autobús? Elija su destino: vaya a ayudar al autobús detenido o continúe su viaje");
       Room BusRoute = new Room("Chapter 4: The Bus Route. ", "You walk down the street to the  bus stop. As you see it approaching you grab something out of your backpack to pay your fare. What do you use? Choose your destiny: *hint* type backpack to see items you have picked up");
       Room SPBusRoute = new Room("Ruta del autobus ", "Caminas por la calle hasta la parada de autobús. Cuando lo ve acercándose, toma algo de su mochila para pagar su pasaje. ¿Que usas? Elige tu destino: * pista * escribe la mochila para ver los artículos que has recogido");
@@ -130,19 +139,16 @@ namespace CastleGrimtol.Project
       bikepath.Exits.Add("south", SSO);
       CurrentRoom = livingroom;
 
-      Item bh = new Item("Bicycle Helmet ", "Protect your melon yo");
+      Item bh = new Item("bicycle helmet", " It protects your melon yo!");
 
       garage.Items.Add(bh);
 
     }
-    public void restart()
-    {
-      Playing = true;
-    }
+    
     public void help()
     {      
       
-      Console.WriteLine("Try typing go to navigate between rooms, take to pick up an item, use to use an item, give-up to quit game, inventory to see items you are holding, or type description to show room's description.");
+      Console.WriteLine("Try typing go to navigate between rooms, take to pick up an item, use to use an item, give-up to quit game, inventory to see items you are holding, type description to show room's description, or restart to reset the game.");
       Console.ReadLine();
     }
 
@@ -160,17 +166,14 @@ namespace CastleGrimtol.Project
 
     public void UseItem(string itemName)
     {
-      System.Console.WriteLine($"You used the {itemName}.");
 
       Item found = CurrentPlayer.Inventory.Find(i => i.Name.Contains(itemName));
       if (found != null)
       {
-        if (CurrentRoom.Name == "Bike Path" && found.Name == "bh")
+        if (CurrentRoom.Name == "Bike Path" && found.Name == "bicycle helmet")
         {
+          System.Console.WriteLine($"You used the {itemName}.");
           System.Console.WriteLine("Using the bike helmet and you traverse the bike path");
-
-
-
         }
         else
         {
@@ -178,6 +181,35 @@ namespace CastleGrimtol.Project
         }
       }
     }
+
+    public void TakeItem(string itemName)
+    {
+        Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
+
+      if (item != null)
+      {
+        Console.WriteLine($"You pick up the {itemName}.");
+        CurrentPlayer.Inventory.Add(item);
+        CurrentRoom.Items.Remove(item);
+      }
+      else
+      {
+        System.Console.WriteLine("Not a valid choice");
+      }
+    }
+    public void setCurrentRoom(Room room)
+    {
+      CurrentRoom = room;
+    }
+
+    public void Reset()
+    {
+      Setup();
+    }
+
+    
+  }
+}
     // {
     // LivingroomPartTwo.exits.Add("east", "room3":"west", "room1");
     // SPLivingroomPartTwo.exits.Add("east", "room4":"west", "room2");
@@ -215,37 +247,3 @@ namespace CastleGrimtol.Project
     //     System.Console.WriteLine($"({input})is not a valid option");
     //     break;        
     // }
-
-    public void setCurrentRoom(Room room)
-    {
-      CurrentRoom = room;
-    }
-
-
-
-
-    public void Reset()
-    {
-      Setup();
-    }
-    public void TakeItem(string itemName)
-    {
-        Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
-
-      if (item != null)
-      {
-        Console.WriteLine($"You pick up the {itemName}.");
-        CurrentPlayer.Inventory.Add(item);
-        CurrentRoom.Items.Remove(item);
-
-      }
-
-      else
-      {
-        System.Console.WriteLine("Not a valid choice");
-      }
-    }
-
-    
-  }
-}
