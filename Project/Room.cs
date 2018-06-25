@@ -32,6 +32,16 @@ namespace CastleGrimtol.Project
       System.Console.WriteLine("Item Used!");
     }
 
+    public Item Takeitem(string item)
+        {
+            Item found = Items.Find(i => i.Name.ToLower() == item );
+            if(found != null){
+                Items.Remove(found);
+                return found;
+            }
+            return null;
+        }
+
 
   }
 

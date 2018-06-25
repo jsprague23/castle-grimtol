@@ -8,27 +8,6 @@ namespace CastleGrimtol.Project
     public Room CurrentRoom { get; set; }
     public Player CurrentPlayer { get; set; }
     public bool Playing = true;
-    public void UseItem(string itemName)
-    {
-      System.Console.WriteLine($"You used the {itemName}.");
-
-      Item found = CurrentPlayer.Inventory.Find(i => i.Name.Contains(itemName));
-      if (found != null)
-      {
-        if (CurrentRoom.Name == "Bike Path" && found.Name == "bh")
-        {
-          System.Console.WriteLine("Using the bike helmet you traverse the bike path");
-
-
-
-        }
-        else
-        {
-          System.Console.WriteLine("You cannot use that item here.");
-        }
-      }
-    }
-
 
     public void play()
     {
@@ -79,15 +58,7 @@ namespace CastleGrimtol.Project
               }
             }
             break;
-          // case "use":
-          //   {
-          //     Console.WriteLine("Which Item to use?");
-          //     var consume = Console.ReadLine();
-          //     var consumeItem =UseItem.use(consume);
-
-          //   }
-          //   break;
-          case "help":
+            case "help":
             {
               Console.Clear();
               help();
@@ -180,8 +151,29 @@ namespace CastleGrimtol.Project
     public void giveUp()
     {
       Console.Clear();
-      Console.WriteLine("The journery proved to difficult, you decide to give up");
+      Console.WriteLine("The journey proved to difficult, you decide to give up");
       Playing = false;
+    }
+
+        public void UseItem(string itemName)
+    {
+      System.Console.WriteLine($"You used the {itemName}.");
+
+      Item found = CurrentPlayer.Inventory.Find(i => i.Name.Contains(itemName));
+      if (found != null)
+      {
+        if (CurrentRoom.Name == "Bike Path" && found.Name == "bh")
+        {
+          System.Console.WriteLine("Using the bike helmet you traverse the bike path");
+
+
+
+        }
+        else
+        {
+          System.Console.WriteLine("You cannot use that item here.");
+        }
+      }
     }
     // {
     // LivingroomPartTwo.exits.Add("east", "room3":"west", "room1");
@@ -229,26 +221,10 @@ namespace CastleGrimtol.Project
     //     break;        
     // }
 
-    // if(CurrentRoom!==input)
-    // {
-    //   System.Console.WriteLine(CurrentRoom.Description);
-    // }
-
-
     public void Reset()
     {
       Setup();
     }
-
-    // public Item UseItem(string itemName)
-    // {
-    //   CurrentRoom.Items.Find()
-    //    if(itemName!=null){
-    //  Console.WriteLine($"After much deliberation you use the {itemName}");
-    //   }
-
-    //   System.Console.WriteLine("Not a valid choice");
-    // }
     public void TakeItem(string item)
     {
       if (item != null)
@@ -265,5 +241,7 @@ namespace CastleGrimtol.Project
         System.Console.WriteLine("Not a valid choice");
       }
     }
+
+    
   }
 }

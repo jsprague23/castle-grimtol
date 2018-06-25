@@ -14,5 +14,6 @@ namespace CastleGrimtol.Project
       Name = name;
       Inventory = new List<Item>();
     }
+    
   }
 }
