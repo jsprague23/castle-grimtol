@@ -38,7 +38,9 @@ namespace CastleGrimtol.Project
               { var helmet = CurrentPlayer.Inventory.Find(i => i.Name.Contains("bicycle helmet"));
                 if(nextRoom.Name == "Chapter 4: The Social Security Office. " && !CurrentPlayer.Inventory.Contains(helmet))
                 {
+                  lose();
                   System.Console.WriteLine("You fall violently off the bikepath and die");
+                  
                 }
                   else 
                 CurrentRoom = nextRoom;
@@ -155,6 +157,7 @@ namespace CastleGrimtol.Project
     public void lose()
     {
       System.Console.WriteLine("You faltered along your journey.");
+      Playing=false;
     }
 
     public void giveUp()
