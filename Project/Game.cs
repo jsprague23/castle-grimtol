@@ -170,7 +170,7 @@ namespace CastleGrimtol.Project
       Item found = CurrentPlayer.Inventory.Find(i => i.Name.Contains(itemName));
       if (found != null)
       {
-        if (CurrentRoom.Name == "Bike Path" && found.Name == "bicycle helmet")
+        if (CurrentRoom.Name == "Chapter 3: The Bike Path. " && found.Name == "bicycle helmet")
         {
           System.Console.WriteLine($"You used the {itemName}.");
           System.Console.WriteLine("Using the bike helmet and you traverse the bike path");
