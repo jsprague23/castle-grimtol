@@ -13,7 +13,6 @@ namespace CastleGrimtol.Project
     {
       while (Playing)
       {
-        Console.Clear();
         Console.WriteLine("Stuck? Try typing help.");
         System.Console.WriteLine("Location: " + CurrentRoom.Name + CurrentRoom.Description);
         System.Console.WriteLine("What do you want to do?");
@@ -22,14 +21,15 @@ namespace CastleGrimtol.Project
         switch (input)
         {
            case "use":
-                        Console.Clear();
-                        UseItem(userInput[1]);
-                        break;
+                        
+          UseItem(userInput[0]);
+          break;
           case "go":
             {
-              Console.Clear();
+              
               System.Console.WriteLine("Which Direction?");
               var direction = Console.ReadLine();
+              var splitChoice= direction.Split(" ");
               var nextRoom = CurrentRoom.Go(direction);
               if (nextRoom != null)
               {
@@ -50,17 +50,18 @@ namespace CastleGrimtol.Project
             break;
           case "inventory":
             {
+              
               for (int i = 0; i < CurrentPlayer.Inventory.Count; i++)
               {
-                Console.WriteLine("Item: " + i + 1 + " " + CurrentPlayer.Inventory[i].Name + CurrentPlayer.Inventory[i].Description);
+                int displaynum= i+1;
+                System.Console.WriteLine(CurrentPlayer.Inventory==null);
 
-
+                Console.WriteLine("Item: " + displaynum + " " + CurrentPlayer.Inventory[i].Name + CurrentPlayer.Inventory[i].Description);
               }
             }
             break;
             case "help":
             {
-              Console.Clear();
               help();
             }
             break;
@@ -129,7 +130,7 @@ namespace CastleGrimtol.Project
       bikepath.Exits.Add("south", SSO);
       CurrentRoom = livingroom;
 
-      Item bh = new Item("Bicycle Helmet", "Protect your melon yo");
+      Item bh = new Item("Bicycle Helmet ", "Protect your melon yo");
 
       garage.Items.Add(bh);
 
@@ -139,8 +140,10 @@ namespace CastleGrimtol.Project
       Playing = true;
     }
     public void help()
-    {
+    {      
+      
       Console.WriteLine("Try typing go to navigate between rooms, take to pick up an item, use to use an item, give-up to quit game, inventory to see items you are holding, or type description to show room's description.");
+      Console.ReadLine();
     }
 
     public void lose()
@@ -150,12 +153,12 @@ namespace CastleGrimtol.Project
 
     public void giveUp()
     {
-      Console.Clear();
-      Console.WriteLine("The journey proved to difficult, you decide to give up");
+      
+      Console.WriteLine("The journey proved too difficult, you decide to give up");
       Playing = false;
     }
 
-        public void UseItem(string itemName)
+    public void UseItem(string itemName)
     {
       System.Console.WriteLine($"You used the {itemName}.");
 
@@ -164,7 +167,7 @@ namespace CastleGrimtol.Project
       {
         if (CurrentRoom.Name == "Bike Path" && found.Name == "bh")
         {
-          System.Console.WriteLine("Using the bike helmet you traverse the bike path");
+          System.Console.WriteLine("Using the bike helmet and you traverse the bike path");
 
 
 
@@ -200,14 +203,6 @@ namespace CastleGrimtol.Project
     // Item V = new Item("Vial", "Shaped like the Aunt Jamima Syrup Bottle...");
     // }
 
-
-    public void setCurrentRoom(Room room)
-    {
-      CurrentRoom = room;
-    }
-
-
-
     // switch (input.ToLower())
     // {
     //   case "south":
@@ -221,18 +216,27 @@ namespace CastleGrimtol.Project
     //     break;        
     // }
 
+    public void setCurrentRoom(Room room)
+    {
+      CurrentRoom = room;
+    }
+
+
+
+
     public void Reset()
     {
       Setup();
     }
-    public void TakeItem(string item)
+    public void TakeItem(string itemName)
     {
+        Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
+
       if (item != null)
       {
-        Console.WriteLine($"You pick up the {item}.");
-        Item itemzz = CurrentRoom.Items.Find(x => x.Name.Contains(item));
-        CurrentPlayer.Inventory.Add(itemzz);
-        CurrentRoom.Items.Remove(itemzz);
+        Console.WriteLine($"You pick up the {itemName}.");
+        CurrentPlayer.Inventory.Add(item);
+        CurrentRoom.Items.Remove(item);
 
       }
 
